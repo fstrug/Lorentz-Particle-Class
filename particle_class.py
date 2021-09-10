@@ -12,7 +12,7 @@ from helper import *
 ############################Create particle class object
 
 class particle_lorentz:
-    def __init__(self, four_vector, tag):
+    def __init__(self, four_vector, tag, decay_dictionary):
         self.four_vector = four_vector
         #Momentum Attributes
         self.Px = four_vector[1]
@@ -26,6 +26,7 @@ class particle_lorentz:
         #Particle Velocity
         self.V = self.Pmag / self.E
         self.tag = tag
+        self.decay_dictionary = decay_dictionary
         
     #Takes list of avaiable mass states and see which pairs are accessible
     def check_decay(self, mass_states):
@@ -41,9 +42,8 @@ class particle_lorentz:
        
         return(available_states)
     
-    def select_decay_branch(self, decay_dictionary):
-        tag = self.tag
-        decay_modes = decay_dictionary[tag]
+    def select_decay_branch(self):
+        decay_modes = self.decay_dictionary[self.tag]
         #choose a decay mode according to probability
         r = np.random.rand()
         r = .31
@@ -60,6 +60,16 @@ class particle_lorentz:
             particles_decay_branch.append(decay_mode[i+1])
         return(particles_decay_branch)
     
+    def two_body_decay(self, mode = None):
+        #Select decay mode
+        if mode == None:
+            particles = select_decay_branch()
+        else: 
+            particles = mode
+        
+        
+        
+    
     #Combines two particle object into a singular particle
     #returns di-jet system particle object
     def combine_jets(self, particle):
@@ -67,10 +77,30 @@ class particle_lorentz:
         combined_jets_object = particle_lorentz(combined_jets)
         return(combined_jets_object)
     
+############################Standard Model Parameters
 
 decay_dictionary = {
-    "top": [(0.30, "W", "bottom"),
-            (0.70, "fake", "fake", "fake")]
+    "top": [(1.0, "W", "bottom"),
+            (0.0, "fake", "fake", "fake")]
     }
-        
+mass_dictionary = {
+    "top"   : 173.29,
+    "W"     : 80.369,
+    "bottom": 1.14
+    }
+    
 top = particle_lorentz([10,0,0,0], "top")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
